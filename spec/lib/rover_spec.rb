@@ -30,5 +30,14 @@ RSpec.describe Rover do
       end
 
     end
+
+
+    context 'when turn left command arrives' do
+
+      it 'changes its direction (from North to West)' do
+        expect { subject.execute 'R' }.to change(subject, :status).from('0 0 N').to('0 0 E')
+      end
+
+    end
   end
 end
