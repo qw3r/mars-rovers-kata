@@ -26,6 +26,7 @@ class Rover
 
   LEFT = 'L'
   RIGHT = 'R'
+  DIRECTIONS = {LEFT => -1, RIGHT => 1}
   attr_reader :wheel
 
 
@@ -37,12 +38,7 @@ class Rover
 
 
   def turn(command)
-    case command
-      when LEFT
-        wheel.rotate! -1
-      when RIGHT
-        wheel.rotate! 1
-    end
+    wheel.rotate! DIRECTIONS[command]
   end
 
 end
