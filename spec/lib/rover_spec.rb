@@ -83,5 +83,11 @@ RSpec.describe Rover do
       end
     end
 
+
+    context 'when invalid command arrives' do
+      it 'does nothing' do
+        expect { subject.execute 'm' }.to_not change(subject, :status)
+      end
+    end
   end
 end
