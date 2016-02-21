@@ -5,8 +5,7 @@ class Rover
 
 
   def initialize(status = '0 0 N')
-    @x, @y, cardinal = status.split(' ')
-    @wheel = CARDINALS.rotate(CARDINALS.index(cardinal))
+    boot_up *status.split(' ')
   end
 
 
@@ -19,8 +18,10 @@ class Rover
 
   def execute(command)
     case command
-      when LEFT, RIGHT
+      when COMMANDS[:left], COMMANDS[:right]
         turn command
+      when COMMANDS[:move]
+        move
     end
 
     @status = "0 0 #{direction}"
@@ -30,12 +31,19 @@ class Rover
 
   private
 
-  LEFT = 'L'
-  RIGHT = 'R'
-  DIRECTIONS = {LEFT => -1, RIGHT => 1}
+  COMMANDS = {left: 'L', right: 'R', move: 'M'}
+  DIRECTIONS = {COMMANDS[:left] => -1, COMMANDS[:right] => 1}
   CARDINALS = %w(N E S W)
 
   attr_reader :x, :y, :wheel
+
+
+
+  def boot_up(x, y, initial_direction)
+    @x = Integer(x)
+    @y = Integer(y)
+    @wheel = CARDINALS.rotate(CARDINALS.index(initial_direction))
+  end
 
 
 
@@ -49,4 +57,9 @@ class Rover
     wheel.rotate! DIRECTIONS[command]
   end
 
+
+
+  def move
+    @y += 1
+  end
 end
