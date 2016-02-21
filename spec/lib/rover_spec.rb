@@ -1,5 +1,5 @@
-require 'rover'
-require 'plateau'
+require_relative '../../lib/rover'
+require_relative '../../lib/plateau'
 
 RSpec.describe Rover do
   context 'when initialized without a plateau' do

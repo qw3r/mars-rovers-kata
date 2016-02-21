@@ -1,4 +1,4 @@
-require 'plateau'
+require_relative '../../lib/plateau'
 
 RSpec.describe Plateau do
   subject { described_class.new '5 5' }

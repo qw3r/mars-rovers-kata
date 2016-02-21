@@ -1,4 +1,4 @@
-require 'mission'
+require_relative '../../lib/mission'
 
 RSpec.describe Mission, :integration do
   subject { described_class.new input }

@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/mission'
+
+Mission.new(DATA.read).run
+
+__END__
+5 5
+1 2 N
+LMLMLMLMM
+3 3 E
+MMRMMRMRRM
