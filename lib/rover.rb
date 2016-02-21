@@ -4,7 +4,7 @@ class Rover
 
 
 
-  def initialize(status = '0 0 N')
+  def initialize(status = '0 0 N', plateau = nil)
     boot_up *status.split(' ')
   end
 

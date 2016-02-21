@@ -1,93 +1,108 @@
 require 'rover'
+require 'plateau'
 
 RSpec.describe Rover do
-  describe '#status' do
-    context 'when no config is provided' do
+  context 'when initialized without a plateau' do
+    describe '#status' do
+      context 'when no config is provided' do
+        it 'is spawned on position 0,0 heading North' do
+          expect(subject.status).to eq '0 0 N'
+        end
 
-      it 'is spawned on position 0,0 heading North' do
-        expect(subject.status).to eq '0 0 N'
       end
 
+
+      context 'when config is provided' do
+        subject { described_class.new '3 4 W' }
+
+        it 'is spawned on that position' do
+          expect(subject.status).to eq '3 4 W'
+        end
+
+      end
     end
 
 
-    context 'when config is provided' do
-      subject { described_class.new '3 4 W' }
+    describe '#execute' do
+      context 'when turn left command arrives' do
+        {
+          '0 0 N' => '0 0 W',
+          '0 0 W' => '0 0 S',
+          '0 0 S' => '0 0 E',
+          '0 0 E' => '0 0 N',
+          '2 4 N' => '2 4 W',
+          '2 4 W' => '2 4 S',
+          '2 4 S' => '2 4 E',
+          '2 4 E' => '2 4 N',
+        }.each do |initial, final|
+          it 'changes the direction to left while maintaining the same position' do
+            subject = described_class.new initial
 
-      it 'is spawned on that position' do
-        expect(subject.status).to eq '3 4 W'
+            expect { subject.execute 'L' }.to change(subject, :status).from(initial).to(final)
+          end
+        end
       end
 
+
+      context 'when turn right command arrives' do
+        {
+          '0 0 N' => '0 0 E',
+          '0 0 E' => '0 0 S',
+          '0 0 S' => '0 0 W',
+          '0 0 W' => '0 0 N',
+          '2 4 N' => '2 4 E',
+          '2 4 E' => '2 4 S',
+          '2 4 S' => '2 4 W',
+          '2 4 W' => '2 4 N',
+        }.each do |initial, final|
+          it 'changes the direction to left while maintaining the same position' do
+            subject = described_class.new initial
+
+            expect { subject.execute 'R' }.to change(subject, :status).from(initial).to(final)
+          end
+        end
+      end
+
+
+      context 'when move command arrives' do
+        {
+          '0 0 N' => '0 1 N',
+          '0 0 E' => '1 0 E',
+          '0 0 S' => '0 -1 S',
+          '0 0 W' => '-1 0 W',
+          '2 4 N' => '2 5 N',
+          '2 4 E' => '3 4 E',
+          '2 4 S' => '2 3 S',
+          '2 4 W' => '1 4 W',
+        }.each do |initial, final|
+
+          it "should move forward one cell towards the direction it's already facing" do
+            subject = described_class.new initial
+
+            expect { subject.execute 'M' }.to change(subject, :status).from(initial).to(final)
+          end
+        end
+      end
+
+
+      context 'when invalid command arrives' do
+        it 'does nothing' do
+          expect { subject.execute 'm' }.to_not change(subject, :status)
+        end
+      end
     end
   end
 
 
-  describe '#execute' do
-    context 'when turn left command arrives' do
-      {
-        '0 0 N' => '0 0 W',
-        '0 0 W' => '0 0 S',
-        '0 0 S' => '0 0 E',
-        '0 0 E' => '0 0 N',
-        '2 4 N' => '2 4 W',
-        '2 4 W' => '2 4 S',
-        '2 4 S' => '2 4 E',
-        '2 4 E' => '2 4 N',
-      }.each do |initial, final|
-        it 'changes the direction to left while maintaining the same position' do
-          subject = described_class.new initial
+  context 'when initialized with a plateau' do
+    let(:plateau) { Plateau.new('5 5') }
 
-          expect { subject.execute 'L' }.to change(subject, :status).from(initial).to(final)
-        end
+    describe '#initialize' do
+      it 'spawns all right inside the plateau' do
+        expect { described_class.new '0 0 N', plateau }.to_not raise_error
       end
     end
 
 
-    context 'when turn right command arrives' do
-      {
-        '0 0 N' => '0 0 E',
-        '0 0 E' => '0 0 S',
-        '0 0 S' => '0 0 W',
-        '0 0 W' => '0 0 N',
-        '2 4 N' => '2 4 E',
-        '2 4 E' => '2 4 S',
-        '2 4 S' => '2 4 W',
-        '2 4 W' => '2 4 N',
-      }.each do |initial, final|
-        it 'changes the direction to left while maintaining the same position' do
-          subject = described_class.new initial
-
-          expect { subject.execute 'R' }.to change(subject, :status).from(initial).to(final)
-        end
-      end
-    end
-
-
-    context 'when move command arrives' do
-      {
-        '0 0 N' => '0 1 N',
-        '0 0 E' => '1 0 E',
-        '0 0 S' => '0 -1 S',
-        '0 0 W' => '-1 0 W',
-        '2 4 N' => '2 5 N',
-        '2 4 E' => '3 4 E',
-        '2 4 S' => '2 3 S',
-        '2 4 W' => '1 4 W',
-      }.each do |initial, final|
-
-        it "should move forward one cell towards the direction it's already facing" do
-          subject = described_class.new initial
-
-          expect { subject.execute 'M' }.to change(subject, :status).from(initial).to(final)
-        end
-      end
-    end
-
-
-    context 'when invalid command arrives' do
-      it 'does nothing' do
-        expect { subject.execute 'm' }.to_not change(subject, :status)
-      end
-    end
   end
 end
