@@ -5,8 +5,14 @@ class Rover
 
 
   def initialize(status = '0 0 N')
-    @status = status
-    @wheel = %w(N E S W)
+    @x, @y, cardinal = status.split(' ')
+    @wheel = CARDINALS.rotate(CARDINALS.index(cardinal))
+  end
+
+
+
+  def status
+    "#{x} #{y} #{direction}"
   end
 
 
@@ -27,7 +33,9 @@ class Rover
   LEFT = 'L'
   RIGHT = 'R'
   DIRECTIONS = {LEFT => -1, RIGHT => 1}
-  attr_reader :wheel
+  CARDINALS = %w(N E S W)
+
+  attr_reader :x, :y, :wheel
 
 
 

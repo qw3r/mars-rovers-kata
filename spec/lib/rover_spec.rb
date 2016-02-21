@@ -24,15 +24,24 @@ RSpec.describe Rover do
 
   describe '#execute' do
     context 'when turn left command arrives' do
+      {
+        '0 0 N' => '0 0 W',
+        '0 0 W' => '0 0 S',
+        # '2 2 N' => '2 2 W',
+        # '2 2 W' => '2 2 S',
+        # '2 2 S' => '2 2 E',
+        # '2 2 E' => '2 2 N',
+      }.each do |initial, final|
+        it 'changes the direction to left while maintaining the same position' do
+          subject = described_class.new initial
 
-      it 'changes its direction (from North to West)' do
-        expect { subject.execute 'L' }.to change(subject, :status).from('0 0 N').to('0 0 W')
+          expect { subject.execute 'L' }.to change(subject, :status).from(initial).to(final)
+        end
       end
-
     end
 
 
-    context 'when turn left command arrives' do
+    context 'when turn right command arrives' do
 
       it 'changes its direction (from North to West)' do
         expect { subject.execute 'R' }.to change(subject, :status).from('0 0 N').to('0 0 E')
