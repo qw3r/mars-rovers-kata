@@ -8,4 +8,9 @@ class Rover
     @status = status
   end
 
+
+
+  def execute(command)
+    @status = '0 0 W'
+  end
 end
