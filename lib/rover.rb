@@ -1,11 +1,16 @@
 class Rover
 
+  class OutOfRangeError < StandardError
+  end
+
   attr_reader :status
 
 
 
   def initialize(status = '0 0 N', plateau = nil)
     boot_up *status.split(' ')
+    @plateau = plateau
+    check_position!
   end
 
 
@@ -35,7 +40,7 @@ class Rover
   DIRECTIONS = {COMMANDS[:left] => -1, COMMANDS[:right] => 1}
   CARDINALS = %w(N E S W)
 
-  attr_reader :x, :y, :wheel
+  attr_reader :x, :y, :wheel, :plateau
 
 
 
@@ -43,6 +48,14 @@ class Rover
     @x = Integer(x)
     @y = Integer(y)
     @wheel = CARDINALS.rotate(CARDINALS.index(initial_direction))
+  end
+
+
+
+  def check_position!
+    return unless plateau
+
+    raise OutOfRangeError unless plateau.include?(x, y)
   end
 
 

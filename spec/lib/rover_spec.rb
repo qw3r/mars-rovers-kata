@@ -5,7 +5,7 @@ RSpec.describe Rover do
   context 'when initialized without a plateau' do
     describe '#status' do
       context 'when no config is provided' do
-        it 'is spawned on position 0,0 heading North' do
+        it 'is placed at position 0,0 heading North' do
           expect(subject.status).to eq '0 0 N'
         end
 
@@ -15,7 +15,7 @@ RSpec.describe Rover do
       context 'when config is provided' do
         subject { described_class.new '3 4 W' }
 
-        it 'is spawned on that position' do
+        it 'is placed at that position' do
           expect(subject.status).to eq '3 4 W'
         end
 
@@ -94,12 +94,16 @@ RSpec.describe Rover do
   end
 
 
-  context 'when initialized with a plateau' do
+  context 'when initialized with a designated plateau' do
     let(:plateau) { Plateau.new('5 5') }
 
     describe '#initialize' do
-      it 'spawns all right inside the plateau' do
+      it 'works all right when placed inside the plateau' do
         expect { described_class.new '0 0 N', plateau }.to_not raise_error
+      end
+
+      it 'raises out-of-range error when placed outside the plateau' do
+        expect { described_class.new '0 6 N', plateau }.to raise_error Rover::OutOfRangeError
       end
     end
 
