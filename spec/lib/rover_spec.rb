@@ -67,8 +67,12 @@ RSpec.describe Rover do
       {
         '0 0 N' => '0 1 N',
         '0 0 E' => '1 0 E',
-        # '0 0 S' => '0 -1 S',
-        # '0 0 W' => '-1 0 W',
+        '0 0 S' => '0 -1 S',
+        '0 0 W' => '-1 0 W',
+        '2 4 N' => '2 5 N',
+        '2 4 E' => '3 4 E',
+        '2 4 S' => '2 3 S',
+        '2 4 W' => '1 4 W',
       }.each do |initial, final|
 
         it "should move forward one cell towards the direction it's already facing" do
