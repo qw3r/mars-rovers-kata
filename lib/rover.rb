@@ -60,6 +60,11 @@ class Rover
 
 
   def move
-    @y += 1
+    case direction
+      when 'N'
+        @y += 1
+      when 'E'
+        @x += 1
+    end
   end
 end

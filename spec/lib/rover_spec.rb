@@ -64,9 +64,20 @@ RSpec.describe Rover do
 
 
     context 'when move command arrives' do
-      it "should move forward one cell towards the direction it's already facing" do
-        expect { subject.execute 'M' }.to change(subject, :status).from('0 0 N').to('0 1 N')
+      {
+        '0 0 N' => '0 1 N',
+        '0 0 E' => '1 0 E',
+        # '0 0 S' => '0 -1 S',
+        # '0 0 W' => '-1 0 W',
+      }.each do |initial, final|
+
+        it "should move forward one cell towards the direction it's already facing" do
+          subject = described_class.new initial
+
+          expect { subject.execute 'M' }.to change(subject, :status).from(initial).to(final)
+        end
       end
     end
+
   end
 end
