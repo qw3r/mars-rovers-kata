@@ -1,9 +1,13 @@
+require 'plateau'
+require 'rover'
+
 class Mission
 
   def initialize(mission_config)
     @config = mission_config.split("\n")
 
-    @plateau = build_plateau
+    @plateau = build_plateau config[0]
+    @rovers = build_rovers config[1..-1]
   end
 
 
@@ -14,7 +18,19 @@ class Mission
 
 
 
-  def build_plateau
-    Plateau.new config.shift
+  def build_plateau(config)
+    Plateau.new config
   end
+
+
+
+  def build_rovers(config)
+    config.each_slice(2).map do |status, commands|
+      {
+        rover: Rover.new(status, plateau),
+        commands: commands.split(''),
+      }
+    end
+  end
+
 end
