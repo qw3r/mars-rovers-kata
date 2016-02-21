@@ -83,5 +83,7 @@ class Rover
       when 'W'
         @x -= 1
     end
+
+    check_position!
   end
 end

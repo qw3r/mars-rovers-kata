@@ -76,7 +76,7 @@ RSpec.describe Rover do
           '2 4 W' => '1 4 W',
         }.each do |initial, final|
 
-          it "should move forward one cell towards the direction it's already facing" do
+          it "moves forward one cell towards the direction it's already facing" do
             subject = described_class.new initial
 
             expect { subject.execute 'M' }.to change(subject, :status).from(initial).to(final)
@@ -102,11 +102,29 @@ RSpec.describe Rover do
         expect { described_class.new '0 0 N', plateau }.to_not raise_error
       end
 
+
       it 'raises out-of-range error when placed outside the plateau' do
         expect { described_class.new '0 6 N', plateau }.to raise_error Rover::OutOfRangeError
       end
     end
 
+
+    describe '#execute' do
+      context 'when move command arrives' do
+        it 'works all right when inside the plateau' do
+          subject = described_class.new '5 3 W', plateau
+
+          expect { subject.execute 'M' }.to_not raise_error
+        end
+
+
+        it 'raises out-of-range error when moved outside the plateau' do
+          subject = described_class.new '5 3 E', plateau
+
+          expect { subject.execute 'M' }.to raise_error Rover::OutOfRangeError
+        end
+      end
+    end
 
   end
 end
