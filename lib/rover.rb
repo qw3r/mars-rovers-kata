@@ -1,7 +1,11 @@
 class Rover
 
-  def status
-    '0 0 N'
+  attr_reader :status
+
+
+
+  def initialize(status = '0 0 N')
+    @status = status
   end
 
 end
