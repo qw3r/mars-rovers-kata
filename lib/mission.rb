@@ -1,5 +1,5 @@
-require 'plateau'
-require 'rover'
+require_relative './plateau'
+require_relative './rover'
 
 class Mission
 
